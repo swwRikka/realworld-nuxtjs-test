@@ -95,11 +95,13 @@ export default {
           slug: this.article.slug
         })
         this.article.favorited = true
+        this.article.favoritesCount = data.article.favoritesCount
       } else {
         const { data } = await unFavoriteArticle({
           slug: this.article.slug
         })
         this.article.favorited = false
+        this.article.favoritesCount = data.article.favoritesCount
       }
       this.article.favoriteDisable = false
     },

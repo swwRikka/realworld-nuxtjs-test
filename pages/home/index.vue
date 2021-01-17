@@ -60,12 +60,14 @@
               </li>
             </ul>
           </div>
-
-          <template v-if="articles && articles.length > 0">
-            <articleView v-for="article in articles" :key="article.slug" :article="article" >
-            </articleView>
+          <template v-if="articlesLoading">Loading articles...</template>
+          <template>
+            <template v-if="articles && articles.length > 0">
+              <articleView v-for="article in articles" :key="article.slug" :article="article" >
+              </articleView>
+            </template>
+            <div class="article-preview" v-else>No articles are here... yet.</div>
           </template>
-          <div class="article-preview" v-else>No articles are here... yet.</div>
 
           <!-- 分页 -->
           <ul class="pagination">
@@ -133,6 +135,7 @@ export default {
     const loadArticles = store.state.user && tab === 'your_feed'
     ? getFeedArticles
     : getArticles
+    let articlesLoading = true
     const [articlesData, tagsData] = await Promise.all([
       loadArticles({
         limit,
@@ -144,6 +147,7 @@ export default {
     const { articles, articlesCount } = articlesData.data || []
     const { tags } = tagsData.data || []
     articles.forEach(item => item.favoriteDisable = false)
+    articlesLoading = false
     return {
       articles: articles,
       articlesCount: articlesCount,
@@ -151,7 +155,8 @@ export default {
       limit,
       tags,
       tag,
-      tab
+      tab,
+      articlesLoading
     }
   },
   computed: {

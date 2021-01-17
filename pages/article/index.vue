@@ -41,6 +41,7 @@
             :key="index"
             @getCommentList="getCommentList"
           ></articlCommentView>
+          <template v-if="commentsLoading">Loading comments...</template>
 
         </div>
       </div>
@@ -60,6 +61,11 @@ import MarkdownIt from 'markdown-it'
 import {mapState} from 'vuex';
 export default {
   name: 'ArticlePage',
+  data() {
+    return {
+      commentsLoading: false
+    }
+  },
   async asyncData({params}) {
     const [activeData, commentsData] = await Promise.all([
       getArticleDetail({
@@ -92,10 +98,12 @@ export default {
   },
   methods: {
     async getCommentList() {
+      this.commentsLoading = true
       const { data } = await getArticleComment({
         slug: this.slug
       })
       this.comments = data.comments || []
+      this.commentsLoading = false
     }
   },
   computed: {

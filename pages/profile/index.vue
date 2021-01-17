@@ -43,7 +43,7 @@
               </li>
             </ul>
           </div>
-          <template v-if="articelLoading">
+          <template v-if="articleLoading">
             <div class="article-preview">Loading articles...</div>
           </template>
           <template v-else>
@@ -84,7 +84,7 @@ export default {
   data() {
     return {
       followingLoading: false,
-      articelLoading: false,
+      articleLoading: false,
       favorites: false,
       articles: [],
       articlesCount: 0,
@@ -132,21 +132,21 @@ export default {
       } else {
         param.author = this.userProfile.username
       }
-      this.articelLoading = true
+      this.articleLoading = true
       const { data } = await getArticles(param)
       this.articles = data.articles
       this.articlesCount = data.articlesCount
-      this.articelLoading = false
+      this.articleLoading = false
     }
   },
   watch: {
     '$route.path'(val) {
       this.favorites = /favorites$/.test(val)
-      this.userArticle(1)
+      this.userProfiles()
     }
   },
   mounted() {
-      this.favorites = /favorites$/.test(this.$route.path)
+    this.favorites = /favorites$/.test(this.$route.path)
     this.userProfiles()
   },
   computed: {
